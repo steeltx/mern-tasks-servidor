@@ -1,12 +1,12 @@
 const moongose = require('mongoose');
 
 const UsuariosSchema = moongose.Schema({
-    nombre:{
+    nombre: {
         type: String,
         required: true,
         trim: true
     },
-    email:{
+    email: {
         type: String,
         required: true,
         trim: true,
@@ -17,7 +17,7 @@ const UsuariosSchema = moongose.Schema({
         required: true,
         trim: true,
     },
-    registro:{
+    registro: {
         type: Date,
         default: Date.now()
     }

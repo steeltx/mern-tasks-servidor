@@ -14,23 +14,23 @@ exports.autenticarUsuario = async (req, res) => {
     // extraer el email y password
     const { email, password } = req.body;
 
-    try{
+    try {
         // revisar que sea un usuario registrado
-        let usuario = await Usuario.findOne({email});
-        if(!usuario){
-            return res.status(400).json({msg:'El usuario no existe'});
+        let usuario = await Usuario.findOne({ email });
+        if (!usuario) {
+            return res.status(400).json({ msg: 'El usuario no existe' });
         }
 
         // revisar el password
         const passCorrecto = await bcryptjs.compare(password, usuario.password);
-        if(!passCorrecto){
-            return res.status(400).json({msj: 'Password incorrecto'});
+        if (!passCorrecto) {
+            return res.status(400).json({ msj: 'Password incorrecto' });
         }
 
         // si todo es correcto
         // crear y firmar el jwt
         const payload = {
-            id: usuario.id
+            usuario: { id: usuario.id }
         };
 
         // firmar el JWT
@@ -40,11 +40,11 @@ exports.autenticarUsuario = async (req, res) => {
             if (error) throw error;
 
             // mensaje de confirmacion
-            res.json({token});
+            res.json({ token });
         });
 
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
-    
+
 }

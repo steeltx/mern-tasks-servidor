@@ -15,7 +15,7 @@ exports.crearUsuario = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // revisr que el usuario registrado sea unico
+        // revisar que el usuario registrado sea unico
         let usuario = await Usuario.findOne({ email });
         if (usuario) {
             return res.status(400).json({ msg: 'El usuario ya existe' });
@@ -33,7 +33,7 @@ exports.crearUsuario = async (req, res) => {
 
         // crear y firmar el jwt
         const payload = {
-            id: usuario.id
+            usuario: { id: usuario.id }
         };
 
         // firmar el JWT
@@ -43,7 +43,7 @@ exports.crearUsuario = async (req, res) => {
             if (error) throw error;
 
             // mensaje de confirmacion
-            res.json({token});
+            res.json({ token });
         });
 
     } catch (error) {
