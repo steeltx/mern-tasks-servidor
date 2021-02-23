@@ -2,6 +2,7 @@ const Usuario = require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+const { json } = require('express');
 
 exports.autenticarUsuario = async (req, res) => {
 
@@ -24,7 +25,7 @@ exports.autenticarUsuario = async (req, res) => {
         // revisar el password
         const passCorrecto = await bcryptjs.compare(password, usuario.password);
         if (!passCorrecto) {
-            return res.status(400).json({ msj: 'Password incorrecto' });
+            return res.status(400).json({ msg: 'Password incorrecto' });
         }
 
         // si todo es correcto
@@ -47,4 +48,15 @@ exports.autenticarUsuario = async (req, res) => {
         console.log(error);
     }
 
+}
+
+// obtiene que usuario esta autenticado
+exports.usuarioAutenticado = async (req, res) => {
+    try {
+        const usuario = await Usuario.findById(req.usuario.id).select('-password');
+        res.json({ usuario });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: 'Hubo un error' });
+    }
 }
